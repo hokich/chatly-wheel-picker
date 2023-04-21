@@ -387,7 +387,7 @@ export default class CommonPicker extends Component<IProps,IState> {
     render(){
         const {isModal, modalProps, modalVisible, onModalVisibleChange} = this.props;
         const pickerView = (
-            <View style={[styles.pickerBox,{minHeight:240+(this.props.showHeader?40:0)}, this.props.style]}>
+            <View style={[styles.pickerBox, this.props.style]}>
                 {this.props.showHeader ?
                     <PickerHeader
                         {...this.props}
@@ -436,7 +436,6 @@ let styles = StyleSheet.create({
         flexDirection: 'row',
         flex:1,
         alignItems:'center',
-        minHeight:240,
     },
     pickerWheel: {
         flex: 1
