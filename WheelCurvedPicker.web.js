@@ -1,11 +1,6 @@
-/* eslint-disable  @typescript-eslint/member-ordering */
-// srouce from https://github.com/react-component/m-picker/blob/master/src/NativePicker.android.tsx
-
 import * as React from 'react';
-import { ScrollView, View, StyleSheet, PixelRatio, Text, PanResponder, Animated } from 'react-native';
+import { ScrollView, View, StyleSheet, Text, PanResponder, Animated } from 'react-native';
 import PropTypes from 'prop-types';
-
-const ratio = PixelRatio.get();
 
 class Picker extends React.Component {
   static propTypes = {
@@ -15,16 +10,8 @@ class Picker extends React.Component {
     itemStyle: PropTypes.object,
     indicator: PropTypes.bool,
     indicatorColor: PropTypes.string,
-    // indicatorStyle: PropTypes.object,
     style: PropTypes.object,
     wheelStyles: PropTypes.object,
-    // defaultSelectedValue: PropTypes.any,
-    // onScrollChange: PropTypes.func,
-    // noAnimate: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    indicator: true,
   };
 
   static Item = (_props) => null;
@@ -63,37 +50,22 @@ class Picker extends React.Component {
           },
         });
       }
-
-      // i do no know why!...
-      // setTimeout(() => {
-      //   this.select(this.props.selectedValue, this.itemHeight, this.scrollTo);
-      // }, 0);
+      this.select(this.props.selectedValue, this.itemHeight, this.scrollTo);
     }
   };
 
   shouldComponentUpdate(nextProps) {
     return this.props.selectedValue !== nextProps.selectedValue || this.props.children !== nextProps.children;
   }
-  componentDidUpdate() {
-    // this.select(this.props.selectedValue, this.itemHeight, this.scrollTo);
-  }
-
-  // componentWillUnmount() {
-    // this.clearScrollBuffer();
-  // }
-
-  // clearScrollBuffer() {
-  //   if (this.scrollBuffer) {
-  //     clearTimeout(this.scrollBuffer);
-  //   }
-  // }
 
   scrollTo = (y) => {
+
     if (this.scrollerRef) {
       this.scrollerRef.scrollTo({
         y,
-        animated: true,
+        animated: this.state.initialized,
       });
+      this.setState({initialized: true})
     }
   };
 
@@ -111,13 +83,7 @@ class Picker extends React.Component {
     })
 
     this.setState({ scrollY: y });
-
-    // this.clearScrollBuffer();
     this.doScrollingComplete(y, this.itemHeight, this.fireValueChange);
-    // this.scrollBuffer = setTimeout(() => {
-    //   this.clearScrollBuffer();
-    //   this.doScrollingComplete(y, this.itemHeight, this.fireValueChange);
-    // }, 0);
   };
 
   select = (value, itemHeight, scrollTo) => {
@@ -160,6 +126,7 @@ class Picker extends React.Component {
     this.state = {
       scrollY: 0,
       deltaY: 0,
+      initialized: false
     };
 
     this.scrollY = new Animated.Value(0);
@@ -246,9 +213,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: -99,
-    // borderColor: "#000",
-    // borderTopWidth: 1,
-    // borderBottomWidth: 1,
   },
 
   scrollView: {
