@@ -155,18 +155,11 @@ class Picker extends React.Component {
   render() {
     const { children, itemStyle, selectedValue, style, indicatorColor, indicator } = this.props;
 
-    if (this.scrollerRef) {
-      this.scrollerRef.addEventListener("wheel", (event) => {
-        event.preventDefault()
-      })
-    }
-
     const items = React.Children.map(children, (item, index) => {
       const totalStyle = [styles.itemText];
       if (selectedValue === item.props.value) {
         totalStyle.push(styles.selectedItemText);
       }
-      // console.log('item.props.index', item.props.value, selectedValue)
       if (item.props.value === selectedValue - 1 || item.props.value === selectedValue + 1) {
         totalStyle.push(styles.secondItem);
       }
@@ -185,7 +178,7 @@ class Picker extends React.Component {
     });
 
     return (
-      <View style={style}>
+      <View style={style} {...this.panResponder.panHandlers}>
         {indicator ? (
           <View
             ref={(el) => (this.indicatorRef = el)}
@@ -199,7 +192,6 @@ class Picker extends React.Component {
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
           overScrollMode="never"
-          {...this.panResponder.panHandlers}
         >
           <View ref={(el) => (this.contentRef = el)}>{items}</View>
         </ScrollView>
